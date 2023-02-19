@@ -5,16 +5,23 @@ import { CartContext } from "../../CartContext/CartContext";
 
 const Cart = () => {
 	const ctx = useContext(CartContext);
-	const cartItems = [
-		{ id: "c1", name: "Sushi", amount: 2, price: 12.99 },
-	].map((item) => <li key={item.id}>{item.name}</li>);
+	let { items, totalAmount } = ctx.cart;
+	totalAmount = totalAmount.toFixed(2);
+	const cartItems = items.map((item) => (
+		<li key={item.item.id}>
+			<p>Name: {item.item.name}</p>
+			<p>Price: {item.item.price}</p>
+			<p>Desc: {item.item.description}</p>
+			<p>Amount: {item.amount}</p>
+		</li>
+	));
 
 	return (
 		<Modal>
 			<ul className={styles["cart-items"]}>{cartItems}</ul>
 			<div className={styles.total}>
 				<span>Total Amount</span>
-				<span>$35.62</span>
+				<span>${totalAmount}</span>
 			</div>
 			<div className={styles.actions}>
 				<button
