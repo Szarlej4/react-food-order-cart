@@ -2,7 +2,7 @@ import styles from "./Header.module.css";
 import mealsHeroImage from "../../../assets/images/meals.jpg";
 import HeaderCartButton from "../HeaderCartButton/HeaderCartButton";
 
-const Header = (props) => {
+const Header = () => {
 	return (
 		<>
 			<header className={styles.header}>

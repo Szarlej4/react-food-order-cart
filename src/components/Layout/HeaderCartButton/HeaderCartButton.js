@@ -1,9 +1,12 @@
 import styles from "./HeaderCartButton.module.css";
 import CartIcon from "../CartIcon/CartIcon";
+import { useContext } from "react";
+import { CartContext } from "../../../CartContext/CartContext";
 
-const HeaderCartButton = (props) => {
+const HeaderCartButton = () => {
+	const ctx = useContext(CartContext);
 	return (
-		<button className={styles.button}>
+		<button onClick={ctx.switchVisibility} className={styles.button}>
 			<span className={styles.icon}>
 				<CartIcon></CartIcon>
 			</span>
