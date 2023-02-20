@@ -10,10 +10,41 @@ export const CartContext = createContext({
 	handleOrder: () => {},
 });
 
-const cartReducer = (state, action) => {};
+const defaultCartState = {
+	items: [],
+	totalAmount: 0,
+};
+
+const cartReducer = (state, action) => {
+	console.log(state.items);
+	if (action.type === "ADD_ITEM") {
+		return {
+			items: [
+				{
+					id: action.item.id,
+					name: action.item.name,
+					description: action.item.description,
+					price: action.item.price,
+					amount: action.item.amount,
+				},
+				...state.items,
+			],
+			totalAmount:
+				state.totalAmount + action.item.price * action.item.amount,
+		};
+	}
+	if (action.type === "REMOVE_ITEM") {
+		return {
+			items: [...state.items],
+			totalAmount: state.totalAmount - action.item.price,
+		};
+	}
+	return defaultCartState;
+};
 
 export const CartContextProvider = (props) => {
 	const [isVisible, setIsVisible] = useState(false);
+	const [cart, dispatchCart] = useReducer(cartReducer, defaultCartState);
 
 	const switchVisibility = () => {
 		setIsVisible((isVisible) => !isVisible);
@@ -23,15 +54,19 @@ export const CartContextProvider = (props) => {
 		console.log("Ordering...");
 	};
 
-	const addItem = (item, amount) => {};
+	const addItemToCardHandler = (item) => {
+		dispatchCart({ type: "ADD_ITEM", item: item });
+	};
 
-	const removeItem = (id) => {};
+	const removeItemFromCardHandler = (id) => {
+		dispatchCart({ type: "REMOVE_ITEM", id: id });
+	};
 
 	const cartContext = {
-		items: [],
-		totalAmount: 0,
-		addItem: addItem,
-		removeItem: removeItem,
+		items: cart.items,
+		totalAmount: cart.totalAmount,
+		addItem: addItemToCardHandler,
+		removeItem: removeItemFromCardHandler,
 		isVisible: isVisible,
 		switchVisibility: switchVisibility,
 		handleOrder: handleOrder,
