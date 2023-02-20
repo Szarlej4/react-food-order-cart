@@ -19,7 +19,7 @@ const MealItemForm = (props) => {
 	const addedMealHandler = (e) => {
 		e.preventDefault();
 		const amount = +ref.current.value;
-		ctx.changeItemAmount(meal, amount);
+		ctx.addItem(meal, amount);
 	};
 
 	return (

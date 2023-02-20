@@ -5,7 +5,7 @@ import { CartContext } from "../../../CartContext/CartContext";
 
 const HeaderCartButton = () => {
 	const ctx = useContext(CartContext);
-	const { items } = ctx.cart;
+	const { items } = ctx;
 	return (
 		<button onClick={ctx.switchVisibility} className={styles.button}>
 			<span className={styles.icon}>

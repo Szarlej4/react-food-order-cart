@@ -5,7 +5,7 @@ import { CartContext } from "../../CartContext/CartContext";
 
 const Cart = () => {
 	const ctx = useContext(CartContext);
-	let { items, totalAmount } = ctx.cart;
+	let { items, totalAmount } = ctx;
 	totalAmount = totalAmount.toFixed(2);
 	const cartItems = items.map((item) => (
 		<li key={item.item.id}>
