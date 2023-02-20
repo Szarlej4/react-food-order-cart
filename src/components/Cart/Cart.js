@@ -11,7 +11,7 @@ const Cart = () => {
 	const hasItems = items.length > 0;
 
 	const addItemHandler = (item) => {
-		addItem(item);
+		addItem({ ...item, amount: 1 });
 	};
 
 	const removeItemHandler = (item) => {
