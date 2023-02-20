@@ -6,9 +6,7 @@ import { CartContext } from "../../../CartContext/CartContext";
 const HeaderCartButton = () => {
 	const ctx = useContext(CartContext);
 	const { items } = ctx;
-	console.log(items);
 	const itemsAmount = items.reduce((acc, item) => {
-		console.log(item);
 		return acc + item.amount;
 	}, 0);
 	return (

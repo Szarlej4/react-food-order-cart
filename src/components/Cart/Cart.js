@@ -15,7 +15,7 @@ const Cart = () => {
 	};
 
 	const removeItemHandler = (item) => {
-		removeItem(item.id);
+		removeItem(item);
 	};
 
 	const cartItems = items.map((item) => (
