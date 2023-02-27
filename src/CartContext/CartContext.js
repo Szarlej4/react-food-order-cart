@@ -60,7 +60,8 @@ const cartReducer = (state, action) => {
 		}
 		return {
 			items: updatedItems,
-			totalAmount: state.totalAmount - action.item.price,
+			totalAmount:
+				Math.round((state.totalAmount - action.item.price) * 100) / 100,
 		};
 	}
 	return defaultCartState;
