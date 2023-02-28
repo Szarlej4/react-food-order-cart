@@ -15,7 +15,7 @@ const MealItemForm = (props) => {
 	const [amountIsValid, setAmountIsValid] = useState(true);
 	const ref = useRef(null);
 	const ctx = useContext(CartContext);
-	const { meal } = props;
+	const { id, name, description, price } = props;
 
 	const addedMealHandler = (e) => {
 		e.preventDefault();
@@ -31,10 +31,10 @@ const MealItemForm = (props) => {
 		}
 		setAmountIsValid(true);
 		ctx.addItem({
-			id: meal.id,
-			name: meal.name,
-			description: meal.description,
-			price: meal.price,
+			id: id,
+			name: name,
+			description: description,
+			price: price,
 			amount: enteredAmount,
 		});
 	};
