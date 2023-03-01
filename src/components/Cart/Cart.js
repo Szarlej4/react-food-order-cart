@@ -20,16 +20,7 @@ const Cart = () => {
 		removeItem(item);
 	};
 
-	const cartItems = items.map((item) => (
-		<CartItem
-			key={item.id}
-			onAdd={addItemHandler}
-			onRemove={removeItemHandler}
-			item={item}
-		/>
-	));
-
-	const goBackHandler = () => {
+	const cancelCheckoutHandler = () => {
 		setIsCheckoutVisible(false);
 	};
 
@@ -37,35 +28,48 @@ const Cart = () => {
 		setIsCheckoutVisible(true);
 	};
 
+	const cartItems = (
+		<ul className={styles["cart-items"]}>
+			{items.map((item) => (
+				<CartItem
+					key={item.id}
+					onAdd={addItemHandler}
+					onRemove={removeItemHandler}
+					item={item}
+				/>
+			))}
+		</ul>
+	);
+
+	const modalActions = (
+		<div className={styles.actions}>
+			<button
+				onClick={ctx.switchVisibility}
+				className={styles["button--alt"]}>
+				Close
+			</button>
+			{hasItems && (
+				<button onClick={openCheckout} className={styles.button}>
+					Order
+				</button>
+			)}
+		</div>
+	);
+
 	return (
 		<Modal>
+			{cartItems}
+			<div className={styles.total}>
+				<span>Total Amount</span>
+				<span>{totalAmount}</span>
+			</div>
 			{isCheckoutVisible ? (
 				<CheckoutForm
 					order={{ items: items, totalAmount: totalAmount }}
-					onCheckoutClosed={goBackHandler}
+					onCancel={cancelCheckoutHandler}
 				/>
 			) : (
-				<>
-					<ul className={styles["cart-items"]}>{cartItems}</ul>
-					<div className={styles.total}>
-						<span>Total Amount</span>
-						<span>{totalAmount}</span>
-					</div>
-					<div className={styles.actions}>
-						<button
-							onClick={ctx.switchVisibility}
-							className={styles["button--alt"]}>
-							Close
-						</button>
-						{hasItems && (
-							<button
-								onClick={openCheckout}
-								className={styles.button}>
-								Order
-							</button>
-						)}
-					</div>
-				</>
+				modalActions
 			)}
 		</Modal>
 	);

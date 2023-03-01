@@ -39,7 +39,11 @@ const CheckoutForm = (props) => {
 	const handleOrder = (e) => {
 		e.preventDefault();
 
-		if (!nameIsValid && !streetIsValid && !postalIsValid && !cityIsValid) {
+		if (!nameIsValid || !streetIsValid || !postalIsValid || !cityIsValid) {
+			nameInputBlurred();
+			streetInputBlurred();
+			postalInputBlurred();
+			cityInputBlurred();
 			return;
 		}
 
@@ -156,13 +160,13 @@ const CheckoutForm = (props) => {
 				)}
 			</div>
 			<div className={styles.actions}>
-				<button className={styles.button} onClick={handleOrder}>
-					Order
-				</button>
 				<button
 					className={styles["button--alt"]}
-					onClick={props.onCheckoutClosed}>
-					Back
+					onClick={props.onCancel}>
+					Cancel
+				</button>
+				<button className={styles.button} onClick={handleOrder}>
+					Order
 				</button>
 			</div>
 		</form>
