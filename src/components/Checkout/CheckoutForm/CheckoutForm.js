@@ -1,8 +1,12 @@
 import styles from "./CheckoutForm.module.css";
+import { useState } from "react";
 import useInput from "../../../hooks/use-input";
 
 const CheckoutForm = (props) => {
-	const { order } = props;
+	const { order, onSubmitted } = props;
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [hasError, setHasError] = useState(false);
+
 	const {
 		value: nameValue,
 		isValid: nameIsValid,
@@ -26,7 +30,7 @@ const CheckoutForm = (props) => {
 		changedValueHandler: postalValueChanged,
 		blurInputHandler: postalInputBlurred,
 		resetInputHandler: postalInputReset,
-	} = useInput((value) => value.trim().length > 5);
+	} = useInput((value) => value.trim().length > 4);
 	const {
 		value: cityValue,
 		isValid: cityIsValid,
@@ -36,8 +40,9 @@ const CheckoutForm = (props) => {
 		resetInputHandler: cityInputReset,
 	} = useInput((value) => value.trim().length > 3);
 
-	const handleOrder = (e) => {
+	const confirmHandler = async (e) => {
 		e.preventDefault();
+		setHasError(false);
 
 		if (!nameIsValid || !streetIsValid || !postalIsValid || !cityIsValid) {
 			nameInputBlurred();
@@ -47,16 +52,33 @@ const CheckoutForm = (props) => {
 			return;
 		}
 
-		console.log("===============");
-		console.log("ORDER DATA: ");
-		console.log({
-			name: nameValue,
-			street: streetValue,
-			postal: postalValue,
-			city: cityValue,
-			order: order,
-		});
+		setIsSubmitting(true);
 
+		try {
+			// const response = await fetch(
+			// 	"https://react-food-order-app-4ad88-default-rtdb.europe-west1.firebasedatabase.app/orders.json",
+			// 	{
+			// 		method: "POST",
+			// 		body: JSON.stringify({
+			// 			name: nameValue,
+			// 			street: streetValue,
+			// 			postal: postalValue,
+			// 			city: cityValue,
+			// 			order: order,
+			// 		}),
+			// 	},
+			// );
+
+			// if (!response.ok) {
+			// 	throw new Error();
+			// }
+
+			onSubmitted();
+		} catch (e) {
+			setHasError(true);
+		}
+
+		setIsSubmitting(false);
 		resetInputs();
 	};
 
@@ -96,7 +118,7 @@ const CheckoutForm = (props) => {
 		? `${styles.control} ${styles.invalid}`
 		: styles.control;
 
-	return (
+	const checkoutForm = (
 		<form className={styles.form}>
 			<p className={styles.formText}>Add address information</p>
 			<div className={nameClasses}>
@@ -140,7 +162,7 @@ const CheckoutForm = (props) => {
 				/>
 				{postalHasError && (
 					<p className={styles.errorText}>
-						Invalid postal(less than 6 characters)
+						Invalid postal (less than 5 characters)
 					</p>
 				)}
 			</div>
@@ -155,7 +177,7 @@ const CheckoutForm = (props) => {
 				/>
 				{cityHasError && (
 					<p className={styles.errorText}>
-						Invalid city(less than 4 characters)
+						Invalid city (less than 4 characters)
 					</p>
 				)}
 			</div>
@@ -165,12 +187,46 @@ const CheckoutForm = (props) => {
 					onClick={props.onCancel}>
 					Cancel
 				</button>
-				<button className={styles.button} onClick={handleOrder}>
+				<button className={styles.button} onClick={confirmHandler}>
 					Order
 				</button>
 			</div>
 		</form>
 	);
+
+	let message = "Loading...";
+
+	if (hasError) {
+		message = "Something went wrong, try again later";
+	}
+
+	const isSubmittingContent = (
+		<>
+			<p className={styles.textInfo}>{message}</p>
+			<div className={styles.actions}>
+				<button className={styles.button} onClick={props.onCancel}>
+					Close
+				</button>
+			</div>
+		</>
+	);
+
+	const hasErrorContent = (
+		<>
+			<p className={styles.textInfo}>{message}</p>
+			<div className={styles.actions}>
+				<button className={styles.button} onClick={props.onCancel}>
+					Close
+				</button>
+			</div>
+		</>
+	);
+
+	return isSubmitting
+		? isSubmittingContent
+		: hasError
+		? hasErrorContent
+		: checkoutForm;
 };
 
 export default CheckoutForm;

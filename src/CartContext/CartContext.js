@@ -8,6 +8,7 @@ export const CartContext = createContext({
 	isVisible: null,
 	switchVisibility: () => {},
 	handleOrder: () => {},
+	clearOrder: () => {},
 });
 
 const defaultCartState = {
@@ -64,6 +65,9 @@ const cartReducer = (state, action) => {
 				Math.round((state.totalAmount - action.item.price) * 100) / 100,
 		};
 	}
+	if (action.type === "CLEAR_ORDER") {
+		return defaultCartState;
+	}
 	return defaultCartState;
 };
 
@@ -87,6 +91,10 @@ export const CartContextProvider = (props) => {
 		dispatchCart({ type: "REMOVE_ITEM", item: item });
 	};
 
+	const clearOrder = () => {
+		dispatchCart({ type: "CLEAR_ORDER" });
+	};
+
 	const cartContext = {
 		items: cart.items,
 		totalAmount: cart.totalAmount,
@@ -95,6 +103,7 @@ export const CartContextProvider = (props) => {
 		isVisible: isVisible,
 		switchVisibility: switchVisibility,
 		handleOrder: handleOrder,
+		clearOrder: clearOrder,
 	};
 
 	return (

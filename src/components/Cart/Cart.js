@@ -7,9 +7,17 @@ import { CartContext } from "../../CartContext/CartContext";
 
 const Cart = () => {
 	const [isCheckoutVisible, setIsCheckoutVisible] = useState(false);
+	const [didSubmit, setDidSubmit] = useState(false);
 	const ctx = useContext(CartContext);
-	let { items, totalAmount, addItem, removeItem } = ctx;
-	totalAmount = `$${totalAmount.toFixed(2)}`;
+	let {
+		items,
+		totalAmount,
+		addItem,
+		removeItem,
+		clearOrder,
+		switchVisibility: switchCartVisibility,
+	} = ctx;
+	const totalAmountText = `$${totalAmount.toFixed(2)}`;
 	const hasItems = items.length > 0;
 
 	const addItemHandler = (item) => {
@@ -26,6 +34,12 @@ const Cart = () => {
 
 	const openCheckout = () => {
 		setIsCheckoutVisible(true);
+	};
+
+	const submitOrderHandler = () => {
+		setIsCheckoutVisible(false);
+		clearOrder();
+		setDidSubmit(true);
 	};
 
 	const cartItems = (
@@ -56,23 +70,41 @@ const Cart = () => {
 		</div>
 	);
 
-	return (
-		<Modal>
+	const didSubmitContent = (
+		<>
+			<p className={styles.textInfo}>
+				Your order has been successfully received
+			</p>
+			<div className={styles.actions}>
+				<button
+					className={styles.button}
+					onClick={ctx.switchVisibility}>
+					Close
+				</button>
+			</div>
+		</>
+	);
+
+	const isSubmittingContent = (
+		<>
 			{cartItems}
 			<div className={styles.total}>
 				<span>Total Amount</span>
-				<span>{totalAmount}</span>
+				<span>{totalAmountText}</span>
 			</div>
 			{isCheckoutVisible ? (
 				<CheckoutForm
 					order={{ items: items, totalAmount: totalAmount }}
 					onCancel={cancelCheckoutHandler}
+					onSubmitted={submitOrderHandler}
 				/>
 			) : (
 				modalActions
 			)}
-		</Modal>
+		</>
 	);
+
+	return <Modal>{didSubmit ? didSubmitContent : isSubmittingContent}</Modal>;
 };
 
 export default Cart;
