@@ -55,23 +55,23 @@ const CheckoutForm = (props) => {
 		setIsSubmitting(true);
 
 		try {
-			// const response = await fetch(
-			// 	"https://react-food-order-app-4ad88-default-rtdb.europe-west1.firebasedatabase.app/orders.json",
-			// 	{
-			// 		method: "POST",
-			// 		body: JSON.stringify({
-			// 			name: nameValue,
-			// 			street: streetValue,
-			// 			postal: postalValue,
-			// 			city: cityValue,
-			// 			order: order,
-			// 		}),
-			// 	},
-			// );
+			const response = await fetch(
+				"https://react-food-order-app-4ad88-default-rtdb.europe-west1.firebasedatabase.app/orders.json",
+				{
+					method: "POST",
+					body: JSON.stringify({
+						name: nameValue,
+						street: streetValue,
+						postal: postalValue,
+						city: cityValue,
+						order: order,
+					}),
+				},
+			);
 
-			// if (!response.ok) {
-			// 	throw new Error();
-			// }
+			if (!response.ok) {
+				throw new Error();
+			}
 
 			onSubmitted();
 		} catch (e) {

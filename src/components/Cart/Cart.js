@@ -9,14 +9,7 @@ const Cart = () => {
 	const [isCheckoutVisible, setIsCheckoutVisible] = useState(false);
 	const [didSubmit, setDidSubmit] = useState(false);
 	const ctx = useContext(CartContext);
-	let {
-		items,
-		totalAmount,
-		addItem,
-		removeItem,
-		clearOrder,
-		switchVisibility: switchCartVisibility,
-	} = ctx;
+	let { items, totalAmount, addItem, removeItem, clearOrder } = ctx;
 	const totalAmountText = `$${totalAmount.toFixed(2)}`;
 	const hasItems = items.length > 0;
 
@@ -40,6 +33,13 @@ const Cart = () => {
 		setIsCheckoutVisible(false);
 		clearOrder();
 		setDidSubmit(true);
+	};
+
+	const closeDidSubmitHandler = () => {
+		clearOrder();
+		setDidSubmit(false);
+		ctx.switchVisibility();
+		setIsCheckoutVisible(false);
 	};
 
 	const cartItems = (
@@ -78,7 +78,7 @@ const Cart = () => {
 			<div className={styles.actions}>
 				<button
 					className={styles.button}
-					onClick={ctx.switchVisibility}>
+					onClick={closeDidSubmitHandler}>
 					Close
 				</button>
 			</div>
